@@ -1,2 +1,1 @@
-# rabbit-stew
-RabbitMQ Tutorials
+# RabbitMQ Tutorials
