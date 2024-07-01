@@ -1,4 +1,10 @@
 services:
+  consumer:
+    build: ./consumer
+    command: python receive.py
+    restart: always
+    depends_on:
+      - rabbitmq
   rabbitmq:
     image: rabbitmq:3.13-management-alpine
     ports:
