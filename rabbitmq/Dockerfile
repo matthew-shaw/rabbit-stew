@@ -2,4 +2,4 @@ FROM rabbitmq:3.13-management-alpine
 
 # COPY rabbitmq.conf /etc/rabbitmq/
 
-HEALTHCHECK CMD rabbitmqctl node_health_check
+HEALTHCHECK CMD rabbitmq-diagnostics -t 30 check_running
