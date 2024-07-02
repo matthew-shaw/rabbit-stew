@@ -1,4 +1,4 @@
-# RabbitMQ Tutorials
+# RabbitMQ Playground
 
 ## Getting started
 
