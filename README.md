@@ -5,7 +5,3 @@
 ```bash
 docker compose up --build
 ```
-
-```bash
-python producer/send.py
-```
