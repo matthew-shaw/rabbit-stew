@@ -5,7 +5,7 @@ import pika
 
 
 def main():
-    connection = pika.BlockingConnection(pika.ConnectionParameters(host="rabbitmq"))
+    connection = pika.BlockingConnection(pika.ConnectionParameters(host="exchange"))
     channel = connection.channel()
 
     channel.queue_declare(queue="hello")

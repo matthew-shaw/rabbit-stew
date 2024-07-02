@@ -1,18 +1,23 @@
 services:
-  consumer:
-    build: ./consumer
-    container_name: consumer
-    command: python receive.py
-    depends_on:
-      rabbitmq:
-        condition: service_healthy
-        restart: true
-  rabbitmq:
+  exchange:
     build: ./exchange
-    container_name: rabbitmq
     ports:
       - 5672:5672
       - 15672:15672
     environment:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
+  consumer:
+    build: ./consumer
+    command: python receive.py
+    depends_on:
+      exchange:
+        condition: service_healthy
+        restart: true
+  producer:
+    build: ./producer
+    command: python send.py
+    depends_on:
+      exchange:
+        condition: service_healthy
+        restart: true
