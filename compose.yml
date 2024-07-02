@@ -7,6 +7,8 @@ services:
     environment:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
+    networks:
+      - exchange
   consumer:
     build: ./consumer
     command: python receive.py
@@ -14,6 +16,9 @@ services:
       exchange:
         condition: service_healthy
         restart: true
+    networks:
+      - exchange
+      - consumer
   producer:
     build: ./producer
     command: python send.py
@@ -21,3 +26,10 @@ services:
       exchange:
         condition: service_healthy
         restart: true
+    networks:
+      - exchange
+      - producer
+networks:
+  exchange:
+  consumer:
+  producer:
