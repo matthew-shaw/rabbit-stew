@@ -2,8 +2,9 @@ import ssl
 
 import pika
 
-ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
-ssl_context.set_ciphers("ECDHE+AESGCM:!ECDSA")
+ssl_context = ssl.create_default_context(cafile="/ssl/ca_certificate.pem")
+ssl_context.verify_mode = ssl.CERT_REQUIRED
+ssl_context.load_cert_chain("/ssl/client_exchange_certificate.pem", "/ssl/client_exchange_key.pem")
 
 parameters = pika.URLParameters("amqps://exchange:5671")
 parameters.ssl_options = pika.SSLOptions(context=ssl_context)

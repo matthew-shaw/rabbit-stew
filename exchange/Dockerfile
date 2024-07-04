@@ -1,7 +1,7 @@
 FROM rabbitmq:3.13-management-alpine
 
 COPY rabbitmq.conf /etc/rabbitmq/
-COPY ssl/ca_certificate.pem ssl/server_certificate.pem ssl/server_key.pem /etc/rabbitmq/ssl/
+COPY ssl/ca_certificate.pem ssl/server_exchange_certificate.pem ssl/server_exchange_key.pem /etc/rabbitmq/ssl/
 
 RUN chown -R rabbitmq:rabbitmq /etc/rabbitmq/ssl/
 

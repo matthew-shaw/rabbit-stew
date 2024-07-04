@@ -9,7 +9,9 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1
 
 COPY requirements.txt send.py ./
+COPY ssl/ca_certificate.pem ssl/client_exchange_certificate.pem ssl/client_exchange_key.pem /ssl/
 RUN pip install -r requirements.txt \
-    && chown -R appuser:appuser ./
+    && chown -R appuser:appuser ./ \
+    && chown -R appuser:appuser /ssl/
 
 USER appuser
