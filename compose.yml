@@ -3,7 +3,7 @@ services:
     build: ./exchange
     ports:
       - 5671:5671
-      - 15672:15672
+      - 15671:15671
     environment:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
