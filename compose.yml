@@ -2,7 +2,6 @@ services:
   exchange:
     build: ./exchange
     ports:
-      - 5671:5671
       - 15671:15671
     environment:
       RABBITMQ_DEFAULT_USER: guest
