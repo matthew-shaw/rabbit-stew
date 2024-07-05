@@ -9,7 +9,7 @@ services:
     networks:
       - exchange
   consumer:
-    build: ./consumer
+    build: ./client
     command: python receive.py
     depends_on:
       exchange:
@@ -19,7 +19,7 @@ services:
       - exchange
       - consumer
   producer:
-    build: ./producer
+    build: ./client
     command: python send.py
     depends_on:
       exchange:
