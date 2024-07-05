@@ -10,14 +10,24 @@ docker compose up --build
 
 ```mermaid
 flowchart LR
-    P((Producer)):::P
-    X{{Exchange}}:::E
-    Q[[Queue]]:::Q
-    C((Consumer)):::C
+    subgraph Docker compose
+        subgraph Producer network
+            P((Producer)):::P
+        end
 
-    P --> X
+        subgraph Exchange network
+            X{{Exchange}}:::E
+            Q[[Queue]]:::Q
+        end
+        
+        subgraph Consumer network
+            C((Consumer)):::C
+        end
+    end
+
+    P -- amqps:5671 --> X
     X --> Q
-    Q --> C
+    C -- amqps:5671 --> Q
 
     classDef P fill:#DAE8FC,stroke:#6C8EBF,stroke-width:2px
     classDef E fill:#F8CECC,stroke:#B85450,stroke-width:2px
