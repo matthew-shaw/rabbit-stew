@@ -20,7 +20,7 @@ class PikaClient:
 
     def declare_queue(self, queue_name):
         logging.info(f"Trying to declare queue({queue_name})...")
-        self.channel.queue_declare(queue=queue_name)
+        self.channel.queue_declare(queue=queue_name, durable=True)
 
     def close(self):
         self.channel.close()
@@ -30,7 +30,12 @@ class PikaClient:
 class Producer(PikaClient):
     def publish(self, exchange, routing_key, body):
         channel = self.connection.channel()
-        channel.basic_publish(exchange=exchange, routing_key=routing_key, body=body)
+        channel.basic_publish(
+            exchange=exchange,
+            routing_key=routing_key,
+            body=body,
+            properties=pika.BasicProperties(delivery_mode=pika.DeliveryMode.Persistent),
+        )
         logging.info(f"Sent message. Exchange: {exchange}, Routing Key: {routing_key}, Body: {body}")
 
 
@@ -38,7 +43,7 @@ class Consumer(PikaClient):
     def consume_messages(self, queue):
         def callback(ch, method, properties, body):
             logging.info(f"[x] Received {body}")
-            ch.basic_ack(delivery_tag = method.delivery_tag)
+            ch.basic_ack(delivery_tag=method.delivery_tag)
             logging.info(f"[x] Acknowledged {body}")
 
         self.channel.basic_consume(queue=queue, on_message_callback=callback)
