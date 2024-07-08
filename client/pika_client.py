@@ -28,7 +28,7 @@ class PikaClient:
 
 
 class Producer(PikaClient):
-    def send_message(self, exchange, routing_key, body):
+    def publish(self, exchange, routing_key, body):
         channel = self.connection.channel()
         channel.basic_publish(exchange=exchange, routing_key=routing_key, body=body)
         logging.info(f"Sent message. Exchange: {exchange}, Routing Key: {routing_key}, Body: {body}")

@@ -17,6 +17,6 @@ if __name__ == "__main__":
         "Hej",
     ]
     for greeting in greetings:
-        producer.send_message(exchange="", routing_key="greeting", body=greeting)
+        producer.publish(exchange="", routing_key="greeting", body=greeting)
 
     producer.close()
