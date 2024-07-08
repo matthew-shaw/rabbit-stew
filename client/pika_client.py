@@ -3,7 +3,7 @@ import ssl
 
 import pika
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(format="%(asctime)s %(levelname)s %(message)s", level=logging.INFO)
 
 
 class PikaClient:
@@ -37,9 +37,9 @@ class Producer(PikaClient):
 class Consumer(PikaClient):
     def consume_messages(self, queue):
         def callback(ch, method, properties, body):
-            logging.info(" [x] Received %r" % body)
+            logging.info("[x] Received %r" % body)
 
         self.channel.basic_consume(queue=queue, on_message_callback=callback, auto_ack=True)
 
-        logging.info(" [*] Waiting for messages...")
+        logging.info("[*] Waiting for messages...")
         self.channel.start_consuming()
