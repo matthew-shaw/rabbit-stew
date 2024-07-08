@@ -8,16 +8,6 @@ services:
       RABBITMQ_DEFAULT_PASS: guest
     networks:
       - exchange
-  consumer:
-    build: ./client
-    command: python receive.py
-    depends_on:
-      exchange:
-        condition: service_healthy
-        restart: true
-    networks:
-      - exchange
-      - consumer
   producer:
     build: ./client
     command: python send.py
@@ -28,6 +18,18 @@ services:
     networks:
       - exchange
       - producer
+  consumer:
+    build: ./client
+    command: python receive.py
+    depends_on:
+      exchange:
+        condition: service_healthy
+        restart: true
+      producer:
+        condition: service_started
+    networks:
+      - exchange
+      - consumer
 networks:
   exchange:
   consumer:
