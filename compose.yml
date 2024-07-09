@@ -27,8 +27,6 @@ services:
       exchange:
         condition: service_healthy
         restart: true
-      producer:
-        condition: service_started
     networks:
       - exchange
       - consumer
