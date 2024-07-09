@@ -44,10 +44,11 @@ class Consumer(PikaClient):
     def consume_messages(self, queue):
         def callback(ch, method, properties, body):
             logging.info(f"[x] Received {body}")
-            time.sleep(2)
+            time.sleep(2)  # Sleep to simulate real message processing happening here
             ch.basic_ack(delivery_tag=method.delivery_tag)
             logging.info(f"[x] Acknowledged {body}")
 
+        self.channel.basic_qos(prefetch_count=1)
         self.channel.basic_consume(queue=queue, on_message_callback=callback)
 
         logging.info("[*] Waiting for messages...")
