@@ -1,5 +1,6 @@
 import logging
 import ssl
+import time
 
 import pika
 
@@ -43,6 +44,7 @@ class Consumer(PikaClient):
     def consume_messages(self, queue):
         def callback(ch, method, properties, body):
             logging.info(f"[x] Received {body}")
+            time.sleep(2)
             ch.basic_ack(delivery_tag=method.delivery_tag)
             logging.info(f"[x] Acknowledged {body}")
 
