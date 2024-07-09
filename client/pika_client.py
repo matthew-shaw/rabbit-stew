@@ -30,8 +30,7 @@ class PikaClient:
 
 class Producer(PikaClient):
     def publish(self, exchange, routing_key, body):
-        channel = self.connection.channel()
-        channel.basic_publish(
+        self.channel.basic_publish(
             exchange=exchange,
             routing_key=routing_key,
             body=body,
