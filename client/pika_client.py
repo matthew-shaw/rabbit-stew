@@ -1,14 +1,15 @@
 import logging
 import ssl
 import time
+from typing import Literal
 
-import pika
+import pika  # type: ignore
 
 logging.basicConfig(format="%(asctime)s %(levelname)s %(message)s", level=logging.INFO)
 
 
 class PikaClient:
-    def __init__(self, host):
+    def __init__(self, host: str) -> None:
         ssl_context = ssl.create_default_context(cafile="/ssl/ca_certificate.pem")
         ssl_context.verify_mode = ssl.CERT_REQUIRED
         ssl_context.load_cert_chain("/ssl/client_exchange_certificate.pem", "/ssl/client_exchange_key.pem")
@@ -19,28 +20,36 @@ class PikaClient:
         self.connection = pika.BlockingConnection(parameters)
         self.channel = self.connection.channel()
 
-    def declare_queue(self, queue_name):
-        logging.info(f"Trying to declare queue({queue_name})...")
-        self.channel.queue_declare(queue=queue_name, durable=True)
+    def declare_exchange(self, name: str, type: Literal["direct", "fanout", "topic", "headers"]) -> None:
+        logging.info(f"Trying to declare exchange({name})...")
+        self.channel.exchange_declare(exchange=name, exchange_type=type)
 
-    def close(self):
+    def declare_queue(self, name: str, exclusive=False) -> None:
+        logging.info(f"Trying to declare queue({name})...")
+        self.channel.queue_declare(queue=name, exclusive=exclusive, durable=True)
+
+    def close(self) -> None:
         self.channel.close()
         self.connection.close()
 
 
 class Producer(PikaClient):
-    def publish(self, exchange, routing_key, body):
+    def publish(self, exchange: str, routing_key: str, message: str) -> None:
         self.channel.basic_publish(
             exchange=exchange,
             routing_key=routing_key,
-            body=body,
+            body=message,
             properties=pika.BasicProperties(delivery_mode=pika.DeliveryMode.Persistent),
         )
-        logging.info(f"Sent message. Exchange: {exchange}, Routing Key: {routing_key}, Body: {body}")
+        logging.info(f"Sent message. Exchange: {exchange}, Routing Key: {routing_key}, Body: {message}")
 
 
 class Consumer(PikaClient):
-    def consume_messages(self, queue):
+    def bind_queue(self, exchange: str, queue: str) -> None:
+        logging.info(f"Trying to bind queue({queue}) to exchange({exchange})...")
+        self.channel.queue_bind(exchange=exchange, queue=queue)
+
+    def consume_messages(self, queue: str) -> None:
         def callback(ch, method, properties, body):
             logging.info(f"[x] Received {body}")
             time.sleep(2)  # Sleep to simulate real message processing happening here

@@ -1,8 +1,8 @@
 from pika_client import Producer
 
 if __name__ == "__main__":
-    producer = Producer("amqps://exchange:5671")
-    producer.declare_queue("tasks")
+    producer = Producer(host="amqps://exchange:5671")
+    producer.declare_exchange(name="tasks", type="direct")
 
     tasks = [
         "Clean the bathroom",
@@ -27,6 +27,6 @@ if __name__ == "__main__":
         "Water the plants",
     ]
     for task in tasks:
-        producer.publish(exchange="", routing_key="tasks", body=task)
+        producer.publish(exchange="tasks", routing_key="tasks", message=task)
 
     producer.close()
