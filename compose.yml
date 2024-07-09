@@ -11,7 +11,7 @@ services:
       - exchange
   producer:
     build: ./client
-    command: python send.py
+    command: python tasks.py
     depends_on:
       exchange:
         condition: service_healthy
@@ -21,7 +21,7 @@ services:
       - producer
   consumer:
     build: ./client
-    command: python receive.py
+    command: python worker.py
     scale: 2
     depends_on:
       exchange:

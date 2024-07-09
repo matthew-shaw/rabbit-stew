@@ -21,13 +21,14 @@ flowchart LR
         end
         
         subgraph Consumer network
-            C((Consumer)):::C
+            C1((Consumer)):::C
+            C2((Consumer)):::C
         end
     end
 
     P -- amqps:5671 --> X
     X --> Q
-    C -- amqps:5671 --> Q
+    C1 & C2 -- amqps:5671 --> Q
 
     classDef P fill:#DAE8FC,stroke:#6C8EBF,stroke-width:2px
     classDef E fill:#F8CECC,stroke:#B85450,stroke-width:2px
