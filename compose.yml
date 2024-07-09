@@ -1,5 +1,6 @@
 services:
   exchange:
+    container_name: rabbitmq
     build: ./exchange
     ports:
       - 15671:15671
@@ -21,6 +22,7 @@ services:
   consumer:
     build: ./client
     command: python receive.py
+    scale: 2
     depends_on:
       exchange:
         condition: service_healthy
