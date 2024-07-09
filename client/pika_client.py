@@ -9,7 +9,10 @@ logging.basicConfig(format="%(asctime)s %(levelname)s %(message)s", level=loggin
 
 
 class PikaClient:
+    """Base class with methods common to Producer and Consumer subclasses."""
+
     def __init__(self, host: str) -> None:
+        """Creates a connection to the RabbitMQ host exchange over TLS with mutual SSL authentication"""
         ssl_context = ssl.create_default_context(cafile="/ssl/ca_certificate.pem")
         ssl_context.verify_mode = ssl.CERT_REQUIRED
         ssl_context.load_cert_chain("/ssl/client_exchange_certificate.pem", "/ssl/client_exchange_key.pem")
