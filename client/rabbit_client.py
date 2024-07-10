@@ -8,7 +8,7 @@ import pika  # type: ignore
 logging.basicConfig(format="%(asctime)s %(levelname)s %(message)s", level=logging.INFO)
 
 
-class PikaClient:
+class RabbitClient:
     """Base class with methods common to Producers and Consumers."""
 
     def __init__(self, host: str) -> None:
@@ -39,8 +39,9 @@ class PikaClient:
         self.connection.close()
 
 
-class Producer(PikaClient):
+class Producer(RabbitClient):
     """Publishes a message with a routing key to an exchange."""
+
     def publish(self, exchange: str, routing_key: str, message: str) -> None:
         self.channel.basic_publish(
             exchange=exchange,
@@ -51,14 +52,16 @@ class Producer(PikaClient):
         logging.info(f"Sent message. Exchange: {exchange}, Routing Key: {routing_key}, Body: {message}")
 
 
-class Consumer(PikaClient):
+class Consumer(RabbitClient):
     """Binds an existing queue to an exchange."""
+
     def bind_queue(self, exchange: str, queue: str) -> None:
         logging.info(f"Trying to bind queue({queue}) to exchange({exchange})...")
         self.channel.queue_bind(exchange=exchange, queue=queue)
 
     def consume_messages(self, queue: str) -> None:
         """Starts consuming messages from a queue."""
+
         def callback(ch, method, properties, body):
             logging.info(f"[x] Received {body}")
             time.sleep(2)  # Sleep to simulate real message processing happening here

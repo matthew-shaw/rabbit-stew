@@ -1,4 +1,4 @@
-from pika_client import Consumer
+from rabbit_client import Consumer
 
 if __name__ == "__main__":
     consumer = Consumer(host="amqps://exchange:5671")

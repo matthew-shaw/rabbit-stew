@@ -1,4 +1,4 @@
-from pika_client import Producer
+from rabbit_client import Producer
 
 if __name__ == "__main__":
     producer = Producer(host="amqps://exchange:5671")
