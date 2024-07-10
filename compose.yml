@@ -13,11 +13,11 @@ services:
     build: ./client
     command: python tasks.py
     depends_on:
-      exchange:
+      broker:
         condition: service_healthy
         restart: true
     environment:
-      - RABBIT_HOST=amqps://exchange:5671
+      - RABBIT_HOST=amqps://broker:5671
     networks:
       - exchange
       - producer
@@ -26,11 +26,11 @@ services:
     command: python worker.py
     scale: 2
     depends_on:
-      exchange:
+      broker:
         condition: service_healthy
         restart: true
     environment:
-      - RABBIT_HOST=amqps://exchange:5671
+      - RABBIT_HOST=amqps://broker:5671
     networks:
       - exchange
       - consumer

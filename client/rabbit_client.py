@@ -15,7 +15,7 @@ class RabbitClient:
         """Creates a secure connection to the RabbitMQ host with TLS and mutual SSL authentication"""
         ssl_context = ssl.create_default_context(cafile="/ssl/ca_certificate.pem")
         ssl_context.verify_mode = ssl.CERT_REQUIRED
-        ssl_context.load_cert_chain("/ssl/client_exchange_certificate.pem", "/ssl/client_exchange_key.pem")
+        ssl_context.load_cert_chain("/ssl/client_broker_certificate.pem", "/ssl/client_broker_key.pem")
 
         parameters = pika.URLParameters(host)
         parameters.ssl_options = pika.SSLOptions(context=ssl_context)
