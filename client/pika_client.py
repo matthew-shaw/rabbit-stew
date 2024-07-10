@@ -9,10 +9,10 @@ logging.basicConfig(format="%(asctime)s %(levelname)s %(message)s", level=loggin
 
 
 class PikaClient:
-    """Base class with methods common to Producer and Consumer subclasses."""
+    """Base class with methods common to Producers and Consumers."""
 
     def __init__(self, host: str) -> None:
-        """Creates a connection to the RabbitMQ host exchange over TLS with mutual SSL authentication"""
+        """Creates a secure connection to the RabbitMQ host with TLS and mutual SSL authentication"""
         ssl_context = ssl.create_default_context(cafile="/ssl/ca_certificate.pem")
         ssl_context.verify_mode = ssl.CERT_REQUIRED
         ssl_context.load_cert_chain("/ssl/client_exchange_certificate.pem", "/ssl/client_exchange_key.pem")
@@ -24,19 +24,23 @@ class PikaClient:
         self.channel = self.connection.channel()
 
     def declare_exchange(self, name: str, type: Literal["direct", "fanout", "topic", "headers"]) -> None:
+        """Creates a new exchange with a given name and type."""
         logging.info(f"Trying to declare exchange({name})...")
         self.channel.exchange_declare(exchange=name, exchange_type=type)
 
     def declare_queue(self, name: str, exclusive=False) -> None:
+        """Creates a new durable queue with a given name."""
         logging.info(f"Trying to declare queue({name})...")
         self.channel.queue_declare(queue=name, exclusive=exclusive, durable=True)
 
     def close(self) -> None:
+        """Closes the channel and connection."""
         self.channel.close()
         self.connection.close()
 
 
 class Producer(PikaClient):
+    """Publishes a message with a routing key to an exchange."""
     def publish(self, exchange: str, routing_key: str, message: str) -> None:
         self.channel.basic_publish(
             exchange=exchange,
@@ -48,11 +52,13 @@ class Producer(PikaClient):
 
 
 class Consumer(PikaClient):
+    """Binds an existing queue to an exchange."""
     def bind_queue(self, exchange: str, queue: str) -> None:
         logging.info(f"Trying to bind queue({queue}) to exchange({exchange})...")
         self.channel.queue_bind(exchange=exchange, queue=queue)
 
     def consume_messages(self, queue: str) -> None:
+        """Starts consuming messages from a queue."""
         def callback(ch, method, properties, body):
             logging.info(f"[x] Received {body}")
             time.sleep(2)  # Sleep to simulate real message processing happening here
