@@ -38,13 +38,14 @@ class RabbitClient:
         """Closes the channel and connection."""
         self.channel.close()
         self.connection.close()
-        logging.info(f"Closed connection")
+        logging.info("Closed connection")
 
 
 class Producer(RabbitClient):
-    """Publishes a message with a routing key to an exchange."""
+    """Producer clients publish messages."""
 
     def publish(self, exchange: str, routing_key: str, message: str) -> None:
+        """Publishes a message with a routing key to an exchange."""
         self.channel.basic_publish(
             exchange=exchange,
             routing_key=routing_key,
@@ -55,11 +56,12 @@ class Producer(RabbitClient):
 
 
 class Consumer(RabbitClient):
-    """Binds an existing queue to an exchange."""
+    """Consumer clients bind queues and consume messages."""
 
-    def bind_queue(self, exchange: str, queue: str) -> None:
-        self.channel.queue_bind(exchange=exchange, queue=queue)
-        logging.info(f"Bound queue '{queue}' to exchange '{exchange}'...")
+    def bind_queue(self, exchange: str, queue: str, binding_key: str) -> None:
+        """Binds an existing queue to an exchange."""
+        self.channel.queue_bind(exchange=exchange, queue=queue, routing_key=binding_key)
+        logging.info(f"Bound queue '{queue}' to exchange '{exchange}' with binding key '{binding_key}'...")
 
     def consume_messages(self, queue: str) -> None:
         """Starts consuming messages from a queue."""
