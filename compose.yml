@@ -16,6 +16,8 @@ services:
       broker:
         condition: service_healthy
         restart: true
+      consumer:
+        condition: service_started
     environment:
       - RABBIT_HOST=amqps://broker:5671
     networks:
