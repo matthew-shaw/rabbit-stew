@@ -1,7 +1,7 @@
 services:
-  exchange:
+  broker:
     container_name: rabbitmq
-    build: ./exchange
+    build: ./broker
     ports:
       - 15671:15671
     environment:
