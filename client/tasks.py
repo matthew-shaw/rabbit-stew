@@ -1,7 +1,9 @@
+import os
+
 from rabbit_client import Producer
 
 if __name__ == "__main__":
-    producer = Producer(host="amqps://exchange:5671")
+    producer = Producer(host=os.environ.get("RABBIT_HOST", ""))
     producer.declare_exchange(name="tasks", type="direct")
 
     tasks = [

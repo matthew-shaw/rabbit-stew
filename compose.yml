@@ -16,6 +16,8 @@ services:
       exchange:
         condition: service_healthy
         restart: true
+    environment:
+      - RABBIT_HOST=amqps://exchange:5671
     networks:
       - exchange
       - producer
@@ -27,6 +29,8 @@ services:
       exchange:
         condition: service_healthy
         restart: true
+    environment:
+      - RABBIT_HOST=amqps://exchange:5671
     networks:
       - exchange
       - consumer
