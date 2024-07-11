@@ -16,22 +16,24 @@ flowchart LR
         end
 
         subgraph Exchange network
-            X{{Exchange}}:::E
-            Q1[[Queue]]:::Q
-            Q2[[Queue]]:::Q
+            X{{Chores}}:::E
+            Q1[[parents_tasks]]:::Q
+            Q2[[kids_tasks]]:::Q
         end
         
         subgraph Consumer network
-            C1((Consumer)):::C
-            C2((Consumer)):::C
+            C1((Parent)):::C
+            C2((Parent)):::C
+            C3((Kid)):::C
+            C4((Kid)):::C
         end
     end
 
     P -- amqps:5671 --> X
     X -- parents --> Q1
     X -- kids --> Q2
-    Q1 -- amqps:5671 --> C1
-    Q2 -- amqps:5671 --> C2
+    Q1 -- amqps:5671 --> C1 & C2
+    Q2 -- amqps:5671 --> C3 & C4
 
     classDef P fill:#DAE8FC,stroke:#6C8EBF,stroke-width:2px
     classDef E fill:#F8CECC,stroke:#B85450,stroke-width:2px
