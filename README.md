@@ -30,8 +30,8 @@ flowchart LR
     P -- amqps:5671 --> X
     X -- parents --> Q1
     X -- kids --> Q2
-    C1 -- amqps:5671 --> Q1
-    C2 -- amqps:5671 --> Q2
+    Q1 -- amqps:5671 --> C1
+    Q2 -- amqps:5671 --> C2
 
     classDef P fill:#DAE8FC,stroke:#6C8EBF,stroke-width:2px
     classDef E fill:#F8CECC,stroke:#B85450,stroke-width:2px
