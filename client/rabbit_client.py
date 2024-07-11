@@ -44,6 +44,12 @@ class RabbitClient:
 class Producer(RabbitClient):
     """Producer clients publish messages."""
 
+    """Enable publisher confirm"""
+    def __init__(self, host: str) -> None:
+        super().__init__(host)
+        self.channel.confirm_delivery()
+        logging.info("Enabled publisher confirms")
+
     def publish(self, exchange: str, routing_key: str, message: str) -> None:
         """Publishes a message with a routing key to an exchange."""
         self.channel.basic_publish(
