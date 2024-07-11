@@ -7,34 +7,37 @@ if __name__ == "__main__":
     producer = Producer(host=os.environ.get("RABBIT_HOST", ""))
 
     # Create a direct exchange
-    producer.declare_exchange(name="tasks", type="direct")
+    producer.declare_exchange(name="chores", type="direct")
 
-    # Make up some messages
-    tasks = [
-        "Clean the bathroom",
-        "Clean the bedroom",
-        "Clean the kitchen",
-        "Clean the windows",
-        "Clear the table",
-        "Cook dinner",
-        "Do the shopping",
-        "Dry clothes",
-        "Feed the pets",
-        "Make the bed",
-        "Mop the floor",
-        "Prepare lunch",
-        "Put clothes away",
-        "Put the dishes away",
-        "Set the table",
-        "Take out the bins",
-        "Vacuum the floors",
-        "Wash clothes",
-        "Wash the dishes",
-        "Water the plants",
+    # Create some household chores
+    chores = [
+        {"task": "Clean the bathroom", "worker": "cleaner"},
+        {"task": "Clean the bedroom", "worker": "cleaner"},
+        {"task": "Clean the kitchen", "worker": "cleaner"},
+        {"task": "Clean the windows", "worker": "cleaner"},
+        {"task": "Clear the table", "worker": "kids"},
+        {"task": "Cook dinner", "worker": "parents"},
+        {"task": "Do the shopping", "worker": "parents"},
+        {"task": "Dry clothes", "worker": "parents"},
+        {"task": "Feed the pets", "worker": "kids"},
+        {"task": "Make the bed", "worker": "parents"},
+        {"task": "Mop the floor", "worker": "cleaner"},
+        {"task": "Mow the grass", "worker": "gardener"},
+        {"task": "Prepare lunch", "worker": "parents"},
+        {"task": "Put clothes away", "worker": "parents"},
+        {"task": "Put the dishes away", "worker": "parents"},
+        {"task": "Set the table", "worker": "kids"},
+        {"task": "Take out the bins", "worker": "parents"},
+        {"task": "Trim hedges", "worker": "gardener"},
+        {"task": "Vacuum the floors", "worker": "cleaner"},
+        {"task": "Wash clothes", "worker": "parents"},
+        {"task": "Wash the dishes", "worker": "parents"},
+        {"task": "Water the plants", "worker": "gardener"},
     ]
-    for task in tasks:
+
+    for chore in chores:
         # Publish messages to the exchange
-        producer.publish(exchange="tasks", routing_key="tasks", message=task)
+        producer.publish(exchange="chores", routing_key=chore["worker"], message=chore["task"])
 
     # Close the connection
     producer.close()

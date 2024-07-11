@@ -17,7 +17,8 @@ flowchart LR
 
         subgraph Exchange network
             X{{Exchange}}:::E
-            Q[[Queue]]:::Q
+            Q1[[Queue]]:::Q
+            Q2[[Queue]]:::Q
         end
         
         subgraph Consumer network
@@ -27,8 +28,10 @@ flowchart LR
     end
 
     P -- amqps:5671 --> X
-    X --> Q
-    C1 & C2 -- amqps:5671 --> Q
+    X -- parents --> Q1
+    X -- kids --> Q2
+    C1 -- amqps:5671 --> Q1
+    C2 -- amqps:5671 --> Q2
 
     classDef P fill:#DAE8FC,stroke:#6C8EBF,stroke-width:2px
     classDef E fill:#F8CECC,stroke:#B85450,stroke-width:2px

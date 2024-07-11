@@ -16,16 +16,31 @@ services:
       broker:
         condition: service_healthy
         restart: true
-      consumer:
+      parent:
+        condition: service_started
+      kid:
         condition: service_started
     environment:
       - RABBIT_HOST=amqps://broker:5671
     networks:
       - exchange
       - producer
-  consumer:
+  parent:
     build: ./client
-    command: python worker.py
+    command: python parent.py
+    scale: 2
+    depends_on:
+      broker:
+        condition: service_healthy
+        restart: true
+    environment:
+      - RABBIT_HOST=amqps://broker:5671
+    networks:
+      - exchange
+      - consumer
+  kid:
+    build: ./client
+    command: python kid.py
     scale: 2
     depends_on:
       broker:
