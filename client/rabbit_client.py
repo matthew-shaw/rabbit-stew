@@ -44,8 +44,8 @@ class RabbitClient:
 class Producer(RabbitClient):
     """Producer clients publish messages."""
 
-    """Enable publisher confirm"""
     def __init__(self, host: str) -> None:
+        """Enable publisher confirm"""
         super().__init__(host)
         self.channel.confirm_delivery()
         logging.info("Enabled publisher confirms")
