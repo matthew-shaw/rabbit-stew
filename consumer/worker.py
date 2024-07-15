@@ -17,7 +17,7 @@ if __name__ == "__main__":
     worker.bind_queue(
         exchange=os.environ.get("RABBITMQ_EXCHANGE", ""),
         queue=os.environ.get("RABBITMQ_QUEUE", ""),
-        binding_key=os.environ.get("RABBITMQ_BINDING", ""),
+        binding_key=os.environ.get("RABBITMQ_BINDING_KEY", ""),
     )
 
     # Start consuming messages

@@ -13,7 +13,9 @@ services:
     build:
       context: .
       dockerfile: ./producer/Dockerfile
-    command: python tasks.py
+    command: gunicorn --bind 0.0.0.0:5000 --access-logfile - --error-logfile - app:app
+    ports:
+      - 5000:5000
     depends_on:
       broker:
         condition: service_healthy
@@ -40,7 +42,7 @@ services:
         condition: service_healthy
         restart: true
     environment:
-      - RABBITMQ_BINDING=parents
+      - RABBITMQ_BINDING_KEY=parents
       - RABBITMQ_EXCHANGE_TYPE=direct
       - RABBITMQ_EXCHANGE=chores
       - RABBITMQ_HOST=amqps://broker:5671
@@ -59,7 +61,7 @@ services:
         condition: service_healthy
         restart: true
     environment:
-      - RABBITMQ_BINDING=kids
+      - RABBITMQ_BINDING_KEY=kids
       - RABBITMQ_EXCHANGE_TYPE=direct
       - RABBITMQ_EXCHANGE=chores
       - RABBITMQ_HOST=amqps://broker:5671
