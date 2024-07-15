@@ -10,7 +10,9 @@ services:
     networks:
       - exchange
   producer:
-    build: ./client
+    build:
+      context: .
+      dockerfile: ./producer/Dockerfile
     command: python tasks.py
     depends_on:
       broker:
@@ -21,33 +23,47 @@ services:
       kid:
         condition: service_started
     environment:
-      - RABBIT_HOST=amqps://broker:5671
+      - RABBITMQ_EXCHANGE_TYPE=direct
+      - RABBITMQ_EXCHANGE=chores
+      - RABBITMQ_HOST=amqps://broker:5671
     networks:
       - exchange
       - producer
   parent:
-    build: ./client
-    command: python parent.py
+    build:
+      context: .
+      dockerfile: ./consumer/Dockerfile
+    command: python worker.py
     scale: 2
     depends_on:
       broker:
         condition: service_healthy
         restart: true
     environment:
-      - RABBIT_HOST=amqps://broker:5671
+      - RABBITMQ_BINDING=parents
+      - RABBITMQ_EXCHANGE_TYPE=direct
+      - RABBITMQ_EXCHANGE=chores
+      - RABBITMQ_HOST=amqps://broker:5671
+      - RABBITMQ_QUEUE=parents_chores
     networks:
       - exchange
       - consumer
   kid:
-    build: ./client
-    command: python kid.py
+    build:
+      context: .
+      dockerfile: ./consumer/Dockerfile
+    command: python worker.py
     scale: 2
     depends_on:
       broker:
         condition: service_healthy
         restart: true
     environment:
-      - RABBIT_HOST=amqps://broker:5671
+      - RABBITMQ_BINDING=kids
+      - RABBITMQ_EXCHANGE_TYPE=direct
+      - RABBITMQ_EXCHANGE=chores
+      - RABBITMQ_HOST=amqps://broker:5671
+      - RABBITMQ_QUEUE=kids_chores
     networks:
       - exchange
       - consumer

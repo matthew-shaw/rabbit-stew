@@ -1,13 +1,16 @@
 import os
 
-from rabbit_client import Producer
+from client.rabbit_client import Producer
 
 if __name__ == "__main__":
     # Create a producer client instance
-    producer = Producer(host=os.environ.get("RABBIT_HOST", ""))
+    producer = Producer(host=os.environ.get("RABBITMQ_HOST", ""))
 
     # Create a direct exchange
-    producer.declare_exchange(name="chores", type="direct")
+    producer.declare_exchange(
+        name=os.environ.get("RABBITMQ_EXCHANGE", ""),
+        type=os.environ.get("RABBITMQ_EXCHANGE_TYPE", "direct"),
+    )
 
     # Create some household chores
     chores = [
@@ -37,7 +40,11 @@ if __name__ == "__main__":
 
     for chore in chores:
         # Publish messages to the exchange
-        producer.publish(exchange="chores", routing_key=chore["worker"], message=chore["task"])
+        producer.publish(
+            exchange=os.environ.get("RABBITMQ_EXCHANGE", ""),
+            routing_key=chore["worker"],
+            message=chore["task"],
+        )
 
     # Close the connection
     producer.close()
