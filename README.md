@@ -9,7 +9,8 @@ docker compose up --build
 ## Design
 
 ```mermaid
-flowchart LR
+flowchart TB
+    client(Client)
     subgraph Docker compose
         subgraph Producer network
             P((Producer)):::P
@@ -29,6 +30,7 @@ flowchart LR
         end
     end
 
+    client -- http --> P
     P -- amqps:5671 --> X
     X -- parents --> Q1
     X -- kids --> Q2
