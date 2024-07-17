@@ -16,11 +16,13 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r producer/requirements.txt && pip install -r requirements_dev.txt
-    - name: Check formatting
-      run: black . -t py312 -l 120 --check
-    - name: Check imports
-      run: isort . --check
-    - name: Check typing
+    - name: Typing
       run: mypy .
-    - name: Check style
+    - name: Security
+      run: bandit -r .
+    - name: Formatting
+      run: black . -t py312 -l 120 --check
+    - name: Imports
+      run: isort . --check
+    - name: Style
       run: flake8 .
