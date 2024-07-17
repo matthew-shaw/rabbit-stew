@@ -1,9 +1,11 @@
 import os
 
 from flask import Flask, Response, request
+from jsonschema import ValidationError, validate
 
 from client.rabbit_client import Producer
 
+# Create a Flask app instance
 app = Flask(__name__)
 
 # Create a producer client instance
@@ -12,13 +14,27 @@ producer = Producer(host=os.environ.get("RABBITMQ_HOST", ""))
 # Create a direct exchange
 producer.declare_exchange(
     name=os.environ.get("RABBITMQ_EXCHANGE", ""),
-    type=os.environ.get("RABBITMQ_EXCHANGE_TYPE", "direct"),
+    type=os.environ.get("RABBITMQ_EXCHANGE_TYPE", ""),
 )
+
+task_schema = {
+    "type": "object",
+    "properties": {
+        "task": {"type": "string"},
+        "worker": {"type": "string"},
+    },
+    "required": ["task", "worker"],
+}
 
 
 @app.post("/v1/tasks")
 def create_task():
     """Create a new task."""
+
+    try:
+        validate(request.json, task_schema)
+    except ValidationError:
+        return Response(status=400)
 
     task = request.json
 
