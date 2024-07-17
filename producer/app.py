@@ -35,7 +35,6 @@ def create_task():
     try:
         validate(request.json, task_schema)
     except ValidationError as e:
-        print(e.message)
         return Response(
             json.dumps({"message": e.message}),
             mimetype="application/json",
