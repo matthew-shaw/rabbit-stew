@@ -92,7 +92,7 @@ class Consumer(RabbitClient):
 
         def callback(ch, method, properties, body):
             logging.info(f"Received message: '{body}'")
-            # time.sleep(2)  # Sleep to simulate real message processing happening here
+            time.sleep(2)  # Sleep to simulate real message processing happening here
             ch.basic_ack(delivery_tag=method.delivery_tag)
             logging.info(f"Acknowledged message: '{body}'")
 
