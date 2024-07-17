@@ -18,6 +18,7 @@ producer.declare_exchange(
     type=os.environ.get("RABBITMQ_EXCHANGE_TYPE", ""),
 )
 
+# Define request schema
 task_schema = {
     "type": "object",
     "properties": {
@@ -32,6 +33,7 @@ task_schema = {
 def create_task():
     """Create a new task."""
 
+    # Validate request body against schema
     try:
         validate(request.json, task_schema)
     except ValidationError as e:
