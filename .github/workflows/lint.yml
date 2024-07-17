@@ -16,10 +16,12 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r producer/requirements.txt && pip install -r requirements_dev.txt
-    - name: Typing
-      run: mypy .
+    - name: Requirements
+      run: pip-audit
     - name: Security
       run: bandit -r .
+    - name: Typing
+      run: mypy .
     - name: Formatting
       run: black . -t py312 -l 120 --check
     - name: Imports
