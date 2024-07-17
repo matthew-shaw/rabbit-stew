@@ -1,3 +1,4 @@
+import json
 import os
 
 from flask import Flask, Response, request
@@ -33,8 +34,13 @@ def create_task():
 
     try:
         validate(request.json, task_schema)
-    except ValidationError:
-        return Response(status=400)
+    except ValidationError as e:
+        print(e.message)
+        return Response(
+            json.dumps({"message": e.message}),
+            mimetype="application/json",
+            status=400,
+        )
 
     task = request.json
 
