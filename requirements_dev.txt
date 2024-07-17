@@ -5,7 +5,9 @@
 #    pip-compile requirements_dev.in
 #
 attrs==23.2.0
-    # via flake8-bugbear
+    # via
+    #   flake8-bugbear
+    #   referencing
 bandit==1.7.9
     # via -r requirements_dev.in
 black==24.4.2
@@ -114,6 +116,8 @@ pytest-cov==5.0.0
     # via -r requirements_dev.in
 pyyaml==6.0.1
     # via bandit
+referencing==0.35.1
+    # via types-jsonschema
 requests==2.32.3
     # via
     #   cachecontrol
@@ -122,6 +126,8 @@ rich==13.7.1
     # via
     #   bandit
     #   pip-audit
+rpds-py==0.19.0
+    # via referencing
 six==1.16.0
     # via html5lib
 sortedcontainers==2.4.0
@@ -130,6 +136,8 @@ stevedore==5.2.0
     # via bandit
 toml==0.10.2
     # via pip-audit
+types-jsonschema==4.23.0.20240712
+    # via -r requirements_dev.in
 typing-extensions==4.12.2
     # via mypy
 urllib3==2.2.2
