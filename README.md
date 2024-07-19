@@ -1,4 +1,4 @@
-# RabbitMQ Playground
+# RabbitMQ Experiments
 
 ## Getting started
 
